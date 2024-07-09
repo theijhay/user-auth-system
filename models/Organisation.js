@@ -1,10 +1,25 @@
-const mongoose = require('mongoose');
+module.exports = (sequelize, DataTypes) => {
+  const Organisation = sequelize.define('Organisation', {
+      orgId: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+      },
+      name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+      },
+      description: {
+          type: DataTypes.STRING,
+      },
+  });
 
-const organisationSchema = new mongoose.Schema({
-    orgId: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    description: { type: String },
-    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-});
+  Organisation.associate = (models) => {
+      Organisation.belongsToMany(models.User, {
+          through: models.UserOrganisation,
+          foreignKey: 'orgId',
+      });
+  };
 
-module.exports = mongoose.model('Organisation', organisationSchema);
+  return Organisation;
+};

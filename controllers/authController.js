@@ -1,5 +1,4 @@
-const User = require('../models/User');
-const Organisation = require('../models/Organisation');
+const { User, Organisation, UserOrganisation } = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
@@ -23,7 +22,7 @@ const register = async (req, res, next) => {
         const userId = uuidv4();
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = new User({
+        const user = await User.create({
             userId,
             firstName,
             lastName,
@@ -32,19 +31,20 @@ const register = async (req, res, next) => {
             phone
         });
 
-        const savedUser = await user.save();
-
-        const org = new Organisation({
+        const org = await Organisation.create({
             orgId: uuidv4(),
             name: `${firstName}'s Organisation`,
-            users: [savedUser._id]
+            description: '',
         });
 
-        await org.save();
+        await UserOrganisation.create({
+            userId: user.userId,
+            orgId: org.orgId
+        });
 
         const payload = {
             user: {
-                id: savedUser.id
+                id: user.userId
             }
         };
 
@@ -60,20 +60,22 @@ const register = async (req, res, next) => {
                     data: {
                         accessToken: token,
                         user: {
-                            userId: savedUser.userId,
-                            firstName: savedUser.firstName,
-                            lastName: savedUser.lastName,
-                            email: savedUser.email,
-                            phone: savedUser.phone
+                            userId: user.userId,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            email: user.email,
+                            phone: user.phone
                         }
                     }
                 });
             }
         );
     } catch (err) {
-        if (err.code === 11000) { // Duplicate key error
-            err.name = 'DuplicateKeyError';
-            return next(err);
+        if (err.name === 'SequelizeUniqueConstraintError') { 
+            const field = err.errors[0].path;
+            return res.status(422).json({
+                errors: [{ field, message: `${field.charAt(0).toUpperCase() + field.slice(1)} already in use` }]
+            });
         }
         next(err);
     }
@@ -83,7 +85,7 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
             return res.status(401).json({ status: 'Bad request', message: 'Authentication failed', statusCode: 401 });
@@ -97,7 +99,7 @@ const login = async (req, res, next) => {
 
         const payload = {
             user: {
-                id: user.id
+                id: user.userId
             }
         };
 

@@ -1,15 +1,38 @@
-const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+      userId: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+      },
+      firstName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+      },
+      lastName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+      },
+      email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+      },
+      password: {
+          type: DataTypes.STRING,
+          allowNull: false,
+      },
+      phone: {
+          type: DataTypes.STRING,
+      },
+  });
 
-const userSchema = new mongoose.Schema({
-    userId: { type: String, required: true, unique: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    phone: { type: String }
-});
+  User.associate = (models) => {
+      User.belongsToMany(models.Organisation, {
+          through: models.UserOrganisation,
+          foreignKey: 'userId',
+      });
+  };
 
-userSchema.plugin(uniqueValidator);
-
-module.exports = mongoose.model('User', userSchema);
+  return User;
+};

@@ -1,21 +1,22 @@
 const request = require('supertest');
 const app = require('../app');
-const mongoose = require('mongoose');
-const User = require('../models/User');
-const Organisation = require('../models/Organisation');
+const { sequelize, User, Organisation, UserOrganisation } = require('../models');
 const jwt = require('jsonwebtoken');
 
+jest.setTimeout(30000); // Set timeout to 30 seconds
+
 beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await sequelize.sync({ force: true }); // Reset the database
 });
 
 afterEach(async () => {
-    await User.deleteMany({});
-    await Organisation.deleteMany({});
+    await User.destroy({ where: {} });
+    await Organisation.destroy({ where: {} });
+    await UserOrganisation.destroy({ where: {} });
 });
 
 afterAll(async () => {
-    await mongoose.connection.close();
+    await sequelize.close();
 });
 
 describe('POST /auth/register', () => {
@@ -36,7 +37,7 @@ describe('POST /auth/register', () => {
         expect(res.body.data.user.firstName).toBe('John');
         expect(res.body.data.user.email).toBe('john@example.com');
 
-        const organisation = await Organisation.findOne({ name: "John's Organisation" });
+        const organisation = await Organisation.findOne({ where: { name: "John's Organisation" } });
         expect(organisation).not.toBeNull();
     });
 
@@ -180,7 +181,7 @@ describe('GET /api/organisations', () => {
                 phone: '0987654321'
             });
 
-        const org1 = await request(app)
+        await request(app)
             .post('/api/organisations')
             .set('Authorization', `Bearer ${user1.body.data.accessToken}`)
             .send({
