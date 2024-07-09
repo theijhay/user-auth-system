@@ -5,6 +5,12 @@ require('dotenv').config();
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true, // This will help you connect to the DB in Vercel with SSL
+      rejectUnauthorized: false, // For Heroku, AWS, Vercel etc.
+    },
+  },
   logging: false,
 });
 

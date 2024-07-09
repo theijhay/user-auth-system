@@ -1,16 +1,12 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "app.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "env": {
-    "DB_USERNAME": "postgres.jlycnshtlrukiymtppel",
-    "DB_PASSWORD": "7Vhdw7uwyb9jQHXj",
-    "DB_NAME": "postgres",
-    "DB_HOST": "aws-0-us-east-1.pooler.supabase.com",
-    "JWT_SECRET": "3:oUwX|6l3lXXcV>7f&)B!QZ9QrFEA"
+    "version": 2,
+    "builds": [
+      { "src": "app.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "/app.js" }
+    ],
+    "env": {
+      "DATABASE_URL": "postgresql://postgres.jlycnshtlrukiymtppel:7Vhdw7uwyb9jQHXj@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
   }
 }

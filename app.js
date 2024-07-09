@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const { sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -10,6 +12,9 @@ const errorHandler = require('./middlewares/errorHandler');
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
 
 app.use(express.json());
 
