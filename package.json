@@ -1,6 +1,7 @@
 {
   "name": "user-auth-system",
   "version": "1.0.0",
+  "description": "Organisation Management System",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -8,20 +9,21 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
-    "express": "^4.19.2",
+    "express": "^4.17.1",
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^8.5.1",
+    "uuid": "^8.3.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "pg": "^8.12.0",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.3",
-    "sequelize-cli": "^6.6.2"
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.6.5"
   },
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/node": "^20.14.10",
-    "jest": "^27.5.1",
-    "supertest": "^6.3.4"
-  }
+    "jest": "^27.0.6",
+    "supertest": "^6.1.6"
+  },
+  "author": "",
+  "license": "ISC"
 }
