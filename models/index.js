@@ -2,15 +2,11 @@ const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
+const pg = require('pg'); // Require pg package
 
 const sequelize = new Sequelize(process.env.POSTGRES_URL, {
   dialect: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true, // This will help you connect to the DB in Vercel with SSL
-      rejectUnauthorized: false, // For Heroku, AWS, Vercel etc.
-    },
-  },
+  dialectModule: pg, // Add this line to use pg module
   logging: false,
 });
 
