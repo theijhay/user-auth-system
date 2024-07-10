@@ -5,6 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "ng": "ng",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
     "test": "jest"
   },
   "dependencies": {
@@ -15,14 +18,13 @@
     "express": "^4.17.1",
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.12.0",
-    "pg-hstore": "^2.3.3",
-    "sequelize": "^6.6.5",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
     "jest": "^27.0.6",
-    "supertest": "^6.1.6"
+    "supertest": "^6.1.6",
+    "pg": "^8.12.0",
+    "sequelize": "^6.6.5"
   },
   "author": "",
   "license": "ISC"
