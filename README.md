@@ -1,6 +1,6 @@
 # User Authentication and Organisation Management System
 
-This project is a Node.js-based API for user authentication and organisation management. It allows users to register, log in, manage their profile, and create or join organisations. The API is built with Express, MongoDB, and JWT for authentication.
+This project is a Node.js-based API for user authentication and organisation management. It allows users to register, log in, manage their profile, and create or join organisations. The API is built with Express, PostgreSQL, and JWT for authentication.
 
 
 ## Table of Contents
@@ -21,14 +21,13 @@ This project is a Node.js-based API for user authentication and organisation man
 - Organisation creation and management
 - Adding users to organisations
 - Protected routes for authenticated users
-- MongoDB integration
-
+- PostgreSQL integration with Sequelize
 
 ## Technologies
 - Node.js
 - Express
-- MongoDB
-- Mongoose
+- PostgreSQL
+- Sequelize
 - JWT (jsonwebtoken)
 - bcryptjs
 
@@ -49,7 +48,7 @@ npm install
 
 3. Create a `.env` file in the root directory and add your environment variables:
 ```
-MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
+POSTGRES_URL=postgresql://[user].jlycnshtlrukiymtppel:[password]@aws-0-us-east-1.pooler.supabase.com:6543/[db-name]
 JWT_SECRET=your_jwt_secret
 ```
 
@@ -269,20 +268,7 @@ npx jest
 - It should ensure users can’t see data from organisations they don’t have access to.
 
 ## Deployment
-This project is deployed on Vercel. Follow these steps to deploy your own instance:
-
-1. Install Vercel CLI:
-```
-npm install -g vercel
-```
-2. Login to Vercel:
-```
-vercel login
-```
-3. Deploy the Project:
-```
-vercel --prod
-```
+This project is deployed on render.
 
 
 
